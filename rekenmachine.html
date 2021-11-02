@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="rekenmachine.js"></script>
+</head>
+<body>
+    
+    <input id="invoer1" type="number">
+    <input id="invoer2" type="number">
+
+    <h4>Optellen</h4>
+    <button onclick="plus()">Bereken</button>
+    <!-- Alternatief: <input type="button"> --> 
+
+    <h4>Aftrekken</h4>
+    <button onclick="min()">Bereken</button>
+
+    <h4>Vermenigvuldigen</h4>
+    <button onclick="keer()">Bereken</button>
+
+    <h4>Delen</h4>
+    <button onclick="gedeelddoor()">Bereken</button>
+    <br>
+    <input type="checkbox" id="kaku">
+    <button onclick="checkbox()">Klik</button>
+
+    <p id="resultaat"></p>
+
+</body>
+</html>
