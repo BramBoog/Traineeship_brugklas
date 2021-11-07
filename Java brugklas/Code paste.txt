@@ -1,0 +1,197 @@
+Dag 2 Voorbeeldcode 1 inheritance
+
+package voorbeeldInheritance ;
+
+public class inheritance {
+	
+    public static void main(String[] args) {
+        Dier dier1 = new WinterHaas();
+        Konijn konijn = new Konijn();
+        //Konijn konijn2 = new Dier();
+        Dier dier2 = new Dier();
+        konijn.leeftijd = 3;
+        konijn.oorLengte = 4;
+        dier2.leeftijd = 24;
+    //    dier2.oorLengte = 5;
+        dier1.leeftijd = 6;
+    //    dier1.oorLengte = 6;
+        OlieTanker ab = new OlieTanker();
+        if(dier1 instanceof WinterHaas) {
+            System.out.println("je een winterhaas");
+            Konijn temp = (Konijn) dier1;
+            temp.oorLengte = 9;
+        }
+        Asiel lief = new Asiel();
+        lief.opnemen(new Konijn());
+        lief.opnemen(new WinterHaas());
+        lief.opnemen(new Dier());
+        lief.opnemen(dier1);
+        lief.opnemen(konijn);
+//        lief.opnemen(ab);
+//        lief.opnemen(new OlieTanker());
+        System.out.println("het is gelukt");
+    }
+}
+class Asiel{
+    void opnemen(Dier hetDier) {
+        System.out.println("opnemen in asiel");
+    //    hetDier.oorLengte = 4;
+        hetDier.voortbewegen();
+    }
+    
+}
+class OlieTanker{}
+
+class Dier{    // Parent   Super Base
+    int leeftijd;
+    String biologischeNaam;    
+    void voortbewegen() {
+        System.out.println("voortbewegen in dier");        
+    }
+}
+class Konijn extends Dier{   // Child    Sub
+    int oorLengte;
+    void wortelsKnagen() {
+        System.out.println("knagen in konijn");
+    }
+}
+class WinterHaas extends Konijn{  // 
+    
+}
+
+
+// Is a relatie   Overerving  Covariant    RICHTING
+
+
+
+Dag 2 Voorbeeldcode 2 Abstract classes
+
+   
+package voorbeeldAbstractClasses;
+
+public class abstractClasses {
+    public static void main(String[] args) {
+        Dier dier = new Konijn();
+        Dier dier2 = new Wolf();
+        dier2.voortbewegen();   // polymorfisme - runtimebinding - virtual method invocation -late binding  
+        new Asiel().opnemen(new WinterHaas());
+        Tembaar t = new Konijn();
+        t.temmen();
+    }
+}
+
+interface Tembaar{
+    void temmen();
+}
+
+
+
+class Konijn extends Dier implements Tembaar{ 
+    
+    public void temmen() {
+        System.out.println("sdafa");
+    }
+    int oorLengte;
+    void voortbewegen() {  
+        System.out.println("voortbewegen in konijn");
+    }
+    void wortelsKnagen() {
+        System.out.println("knagen in konijn");
+    }
+}
+
+
+
+
+abstract class Dier{   // state 
+    int leeftijd;
+    String biologischeNaam;    
+    abstract void voortbewegen();
+    Dier(){
+        System.out.println("c in dier");
+    }
+}
+class Wolf extends Dier{
+    
+    Wolf(){
+        //super(5);			  // refereert aan de constructor van de parent class. Staat er altijd impliciet, dus is niet perse nodig om te typen.
+        System.out.println("c in wolf");  // moet de eerste regel zijn, dus eventuele extra regels moeten eronder of in de constructor van de parent class.
+    }
+    
+    void voortbewegen() {
+        System.out.println("voortbewegen in wolf");
+    }
+}
+
+
+
+class WinterHaas extends Konijn{  // 
+    void voortbewegen() {
+        System.out.println("voortbewegen in winterhaas");
+    }
+}
+
+class Asiel{
+    void opnemen(Dier hetDier) {
+        System.out.println("opnemen in asiel");
+    //    hetDier.oorLengte = 4;
+        hetDier.voortbewegen();
+    }
+    
+}
+class OlieTanker{}
+
+// override     4 regels 
+//1 signature hetzelfde (input types)
+//2 returntype moet covariant 
+//3 acess niet vernauwen : private default/packageprivate protected public
+//4 covariant throwsen of niets  
+
+
+
+Dag 3 Voorbeeldcode 1
+
+public class Demo {
+    public static void main(String[] args) {
+        System.out.println("go");
+        MountainBike f = new MountainBike(55);
+        //f.snelheid = 34;
+        f.setSnelheid(34);
+        f.fietsen();
+        System.out.println(f.getSnelheid());
+        //System.out.println(f.snelheid);
+        
+    }
+}
+class MountainBike extends Fiets{
+    MountainBike(int a){
+        super(a);
+    }
+}
+// private default-packageprivate  protected public
+
+// design pattern
+    // encapsulation 
+
+// flow chart UML
+abstract class Fiets{
+    Fiets(int b){
+        snelheid = b;
+    }
+    private int snelheid;// autoini de default waarde  0 0.0 false \n0000
+    void setSnelheid(int speed) {
+        int gaan=0;
+        System.out.println(gaan);
+        if(speed < 0) {
+            System.out.println("hoho dat");
+        }else {
+            snelheid = speed;
+        }
+    }
+    int getSnelheid() {
+        return snelheid;
+    }
+    void fietsen() {
+        System.out.println("ik ben aan het fietsen "+snelheid);
+    }
+}

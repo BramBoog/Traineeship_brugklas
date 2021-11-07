@@ -1,0 +1,25 @@
+p {
+    color: red;
+    font-size: 24px;
+}
+
+img {
+    border: 10px dashed green;
+}
+
+#spanid {
+    text-decoration: underline;
+}
+
+.mijntable {
+    background-color: chocolate;
+}
+
+#lastp:hover {
+    color: blue;
+    text-decoration: underline;
+}
+
+/* comments
+nog meer
+*/
