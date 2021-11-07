@@ -28,7 +28,7 @@ public class Miniopdrachten {
 		
 //		new Miniopdrachten().opdracht9();
 		
-		new Miniopdrachten().opdracht10();
+//		new Miniopdrachten().opdracht10();
 		
 	}
 	
@@ -137,6 +137,8 @@ public class Miniopdrachten {
 		for(int i=0; i < charAmount; i++) {
 			System.out.println(alphabeticalCharArr[i]);
 		}
+		
+		sc.close();
 	}
 	
 	void opdracht7() {
@@ -160,6 +162,7 @@ public class Miniopdrachten {
 				System.out.println("Voer je nieuwe gis in.");
 			}
 		}
+		lingo1.sc.close();
 	}
 	
 	void opdracht8() {
@@ -204,6 +207,7 @@ public class Miniopdrachten {
 			}
 		}
 		System.out.println("Dat was het!");
+		sc.close();
 	}
 	
 }
@@ -268,9 +272,11 @@ class Auto {
 class Lingo {
 	
 	String word;
+	Scanner sc;
 	
 	Lingo(String word) {
 		this.word = word.toLowerCase();
+		this.sc = new Scanner(System.in);
 	}
 	
 	void gameStart() {
@@ -285,7 +291,6 @@ class Lingo {
 	}
 	
 	int[] userGuess() {
-		Scanner sc = new Scanner(System.in);
 		char[] wordCharArr = word.toCharArray();
 		int wordLength = word.length();
 		boolean invalidGuess = true;
@@ -293,7 +298,7 @@ class Lingo {
 		
 		while(invalidGuess) {
 			
-			String guess = sc.next();
+			String guess = this.sc.next();
 			guess = guess.toLowerCase();
 			
 			if(guess.length() != wordLength) {
@@ -304,7 +309,7 @@ class Lingo {
 				invalidGuess = false;
 				char[] guessCharArr = guess.toCharArray();
 				
-				// Turn the Character Array of word into an ArrayList in order to use .contains later. 
+			//  Turn the Character Array of word into an ArrayList in order to use .contains later. 
 				ArrayList<Character> wordCharArrLst = new ArrayList<Character>();
 				for(int x=0; x < wordLength; x++) {
 					wordCharArrLst.add(wordCharArr[x]);

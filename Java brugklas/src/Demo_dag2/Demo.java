@@ -1,7 +1,6 @@
 package Demo_dag2;
 
 
-
 import java.util.Scanner;
 import java.util.Random;
 import java.util.ArrayList;
