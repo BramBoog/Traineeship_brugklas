@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vraag1</title>
+
+    <script>
+        function start() {
+            var var2 = new XMLHttpRequest();        // functionaliteit in een variabele
+            var deinput = document.getElementById("invoervak").value;
+            var deinput2 = document.getElementById("invoervak2").value;
+            var2.onreadystatechange = function () {
+                if(this.readyState == 4) {
+
+             // this. refereert hier aan het var2 object
+                
+                    console.log(this.responseText);
+                 // this.responseText refereert aan de output (Werknemer) van de method die in de backend
+                 // onder het endpoint staat dat hieronder wordt gebruikt in .open()
+                 // Het is wel platte tekst in JSON format, dus het moet terug worden geparsed
+                 // naar een Werknemer object:
+                    var mijnobj = JSON.parse(this.responseText);
+                    document.getElementById("mijnoutput").innerHTML = mijnobj.naam;
+                    document.getElementById("mijnoutput2").innerHTML = mijnobj.leeftijd;
+                 // .innerHTML refereert aan de binnenkant van de tag met id "mijnoutput",
+                 // dus binnen de <div> </div>
+                }
+            }
+
+            var2.open("GET", "http://localhost:8082/zozozo/" + deinput + "/" + deinput2, true);
+            // laatste argument geeft asynchroniteit aan
+            var2.send();
+        }
+    </script>
+
+</head>
+
+<body>
+    
+    <input id=invoervak>
+    <input id=invoervak2>
+    <input type=button onclick=start() value=klikhier>
+    <div id=mijnoutput></div>
+    <div id=mijnoutput2></div>
+
+</body>

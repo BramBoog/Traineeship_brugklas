@@ -1,0 +1,8 @@
+Cloning a remote/local repository:
+	$ git clone <path/link to repository>
+Setting user email for all/only current repository:
+	$ git config --user.email <email>
+Telling git to ignore a file/directory:
+	$ echo <file/dir name> >> .gitignore
+Resetting a pull:
+	$ git reset --hard ORIG_HEAD
