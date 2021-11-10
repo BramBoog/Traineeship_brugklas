@@ -1,6 +1,8 @@
 package kermisOpdracht;
 
 import java.util.Scanner;
+import java.util.Random;
+import java.lang.Class;
 
 public class KermisOpdracht {
 	public static void main(String[] args) {
@@ -27,7 +29,7 @@ public class KermisOpdracht {
 				+ "k: totaal aantal verkochte tickets\n"
 				+ "k_<attractienummer>: aantal verkochte tickets van individuele attractie\n"
 				+ "\n"
-				+ "r_<attractienummer>: onderhoudsbeurt geven (resetten) van spin of Hawaii\n"
+				+ "m_<attractienummer>: monteur roepen voor onderhoudsbeurt aan spin of Hawaii\n"
 				+ "\n"
 				+ "quit: afsluiten");
 		
@@ -41,7 +43,9 @@ public class KermisOpdracht {
 		Attractie[] attracties = {botsautos, spin, spiegelpaleis, spookhuis, hawaii, ladderklimmen};
 		Kassa kassa = new Kassa();
 		int totalTickets = 0;
+		BelastingInspecteur belastingInspec = new BelastingInspecteur();
 		Scanner sc = new Scanner(System.in);
+		Random r = new Random();
 		
 	//  Main loop
 		while(true) {
@@ -53,6 +57,16 @@ public class KermisOpdracht {
 				
 				for(int i=0; i<6; i++) {
 					if (attractieID == (i+1)) {
+						
+						if(attractieID == 2 || attractieID == 5) {
+							RisicoRijkeAttractie risicoAtt = (RisicoRijkeAttractie) attracties[i];
+							if(risicoAtt.draaiAmount >= risicoAtt.draaiLimiet) {
+								throw new RuntimeException("De attractie " + risicoAtt.name +
+											" heeft zijn draailimiet van " + risicoAtt.draaiLimiet + " bereikt!\n"
+											+ "Roep een monteur aan met m_2 voor het draailimiet wordt bereikt om dit te voorkomen.");
+							}
+						}
+						
 						attracties[i].draaien();
 						kassa.turnover += attracties[i].price;
 						totalTickets += 1;
@@ -63,6 +77,15 @@ public class KermisOpdracht {
 				
 				if (gedraaid == false) {
 					System.out.println("De toegestane attractienummers zijn 1-6.");
+				}
+				
+			//  If an attractie did run, random visit from the belastinginspecteur is possible
+				else {
+					if(r.nextInt(16) == 1) {
+						for(int i=0; i<6; i++) {
+							belastingInspec.belastingHeffen(kassa, attracties[i]);
+						}
+					}
 				}
 			}
 			
@@ -121,7 +144,7 @@ public class KermisOpdracht {
 
 class Kassa {
 	double turnover;
-	int inspectorVisits;
+	int taxVisits;
 }
 
 abstract class Attractie {
@@ -138,6 +161,7 @@ abstract class Attractie {
 		System.out.println("De attractie " + name + " draait.");
 		this.tickets += 1;
 		this.turnover += this.price;
+		this.draaiAmount += 1;
 	}
 }
 
@@ -153,6 +177,22 @@ interface GokAttractie {
 	double kansSpelBelastingBetalen();
 }
 
+class BelastingInspecteur {
+	int totalTax = 0;
+	
+	void belastingHeffen(Kassa kassa, Attractie attr) {
+		if(GokAttractie.class.isAssignableFrom(attr.getClass())) {
+			GokAttractie gokAttr = (GokAttractie) attr;
+			double tax = gokAttr.kansSpelBelastingBetalen();
+			totalTax += tax;
+			attr.turnover -= tax;
+			kassa.turnover -= tax;
+			kassa.taxVisits += 1;
+			System.out.println("Er is belasting geheven over de omzet van " + attr.name);
+		}
+	}
+}
+
 class Botsautos extends Attractie {
 	
 	Botsautos() {
@@ -160,16 +200,20 @@ class Botsautos extends Attractie {
 		this.name = Attractie.attractieNames[ID-1];
 		this.price = 2.50;
 	}
-	
 }
 
-class Spin extends RisicoRijkeAttractie {
+class Spin extends RisicoRijkeAttractie implements GokAttractie {
 	
 	Spin() {
 		this.ID = 2;
 		this.name = Attractie.attractieNames[ID-1];
 		this.price = 2.25;
 		this.draaiLimiet = 5;
+	}
+	
+	public double kansSpelBelastingBetalen() {
+		double taxPayment = this.turnover * 0.3;
+		return taxPayment;
 	}
 }
 
@@ -211,7 +255,6 @@ class Ladderklimmen extends Attractie implements GokAttractie {
 	
 	public double kansSpelBelastingBetalen() {
 		double taxPayment = this.turnover * 0.3;
-		this.turnover -= taxPayment;
 		return taxPayment;
 	}
 }
