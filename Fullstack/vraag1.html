@@ -13,8 +13,11 @@
             var deinput2 = document.getElementById("invoervak2").value;
             var2.onreadystatechange = function () {
                 if(this.readyState == 4) {
-
              // this. refereert hier aan het var2 object
+
+             // readystates:
+             // 0: UNSENT (initial state); 1: OPENED (open called); 2: HEADERS_RECIEVED (response headers received)
+             // 3: LOADING (response is loading; data packet received); 4: DONE (request complete)
                 
                     console.log(this.responseText);
                  // this.responseText refereert aan de output (Werknemer) van de method die in de backend
@@ -30,7 +33,8 @@
             }
 
             var2.open("GET", "http://localhost:8082/zozozo/" + deinput + "/" + deinput2, true);
-            // laatste argument geeft asynchroniteit aan
+            // Laatste argument geeft asynchroniteit aan: het script blijft niet hangen op open
+            // Het request is nu aangemaakt, maar moet ook nog verzonden worden:
             var2.send();
         }
     </script>

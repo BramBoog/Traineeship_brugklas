@@ -1,8 +1,25 @@
 Cloning a remote/local repository:
 	$ git clone <path/link to repository>
 Setting user email for all/only current repository:
-	$ git config --user.email <email>
+	$ git config global/local --user.email <email>
+Changing branch name:
+	$ git branch -m "<branch name>"
 Telling git to ignore a file/directory:
 	$ echo <file/dir name> >> .gitignore
+Add all files which previously have been added:
+	$ git commit -am "<message>"
+Setting remote branch (origin) as upstream branch for current branch <branch name> and push:
+	$ git push -u origin <branch name>
+Create new branch:
+	$ git checkout -b <branch name>
+Switch branch:
+	$ git checkout <branch name>
+Merging current branch with <branch name>:
+	$ git merge <branch name>
 Resetting a pull:
 	$ git reset --hard ORIG_HEAD
+
+VI:
+i: insert mode
+esc: command mode
+in command mode: :wq
