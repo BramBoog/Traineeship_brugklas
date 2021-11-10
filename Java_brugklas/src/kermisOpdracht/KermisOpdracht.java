@@ -27,6 +27,8 @@ public class KermisOpdracht {
 				+ "k: totaal aantal verkochte tickets\n"
 				+ "k_<attractienummer>: aantal verkochte tickets van individuele attractie\n"
 				+ "\n"
+				+ "r_<attractienummer>: onderhoudsbeurt geven (resetten) van spin of Hawaii\n"
+				+ "\n"
 				+ "quit: afsluiten");
 		
 	//  Create central objects that make up the kermis
@@ -41,6 +43,7 @@ public class KermisOpdracht {
 		int totalTickets = 0;
 		Scanner sc = new Scanner(System.in);
 		
+	//  Main loop
 		while(true) {
 			
 		//  If the input is an integer, run the corresponding attractie.
@@ -73,8 +76,7 @@ public class KermisOpdracht {
 				
 			//  Turnover of individual attractie
 				else if(inputText.length() == 3 && inputText.substring(0, 2).equals("o_")) {
-					char IDChar = inputText.charAt(2);
-					int ID = Character.getNumericValue(IDChar);
+					int ID = Character.getNumericValue(inputText.charAt(2));
 					System.out.println("Omzet van " + attracties[ID-1].name  + ": " + attracties[ID-1].turnover);
 				}
 				
@@ -85,9 +87,21 @@ public class KermisOpdracht {
 				
 			//  Ticket amount of individual attractie
 				else if(inputText.length() == 3 && inputText.substring(0, 2).equals("k_")) {
-					char IDChar = inputText.charAt(2);
-					int ID = Character.getNumericValue(IDChar);
+					int ID = Character.getNumericValue(inputText.charAt(2));
 					System.out.println("Aantal tickets van " + attracties[ID-1].name  + ": " + attracties[ID-1].tickets);
+				}
+				
+			//  Reset draaiAmount for RisicoRijkeAttracties
+				else if(inputText.length() == 3 && inputText.substring(0,2).equals("r_")) {
+					int ID = Character.getNumericValue(inputText.charAt(2));
+					if(!(ID == 2 || ID == 5)) {
+						System.out.println("Alleen spin en Hawaii kunnen een onderhoudsbeurt krijgen!");
+					}
+					else {
+						attracties[ID-1].draaiAmount = 0;
+						System.out.println("De attractie " + attracties[ID-1].name + " heeft een onderhoudsbeurt gekregen.");
+					}
+					
 				}
 				
 				else if(inputText.equals("quit")) {
@@ -118,12 +132,25 @@ abstract class Attractie {
 	double turnover;
 	int tickets;
 	int area;
+	int draaiAmount;
 	
 	void draaien() {
 		System.out.println("De attractie " + name + " draait.");
 		this.tickets += 1;
 		this.turnover += this.price;
 	}
+}
+
+abstract class RisicoRijkeAttractie extends Attractie {
+	int draaiLimiet;
+	
+	 void opstellingsKeuring() {
+		 this.draaiAmount = 0;
+	 }
+}
+
+interface GokAttractie {
+	double kansSpelBelastingBetalen();
 }
 
 class Botsautos extends Attractie {
@@ -136,12 +163,13 @@ class Botsautos extends Attractie {
 	
 }
 
-class Spin extends Attractie {
+class Spin extends RisicoRijkeAttractie {
 	
 	Spin() {
 		this.ID = 2;
 		this.name = Attractie.attractieNames[ID-1];
 		this.price = 2.25;
+		this.draaiLimiet = 5;
 	}
 }
 
@@ -163,20 +191,27 @@ class Spookhuis extends Attractie {
 	}
 }
 
-class Hawaii extends Attractie {
+class Hawaii extends RisicoRijkeAttractie {
 	
 	Hawaii() {
 		this.ID = 5;
 		this.name = Attractie.attractieNames[ID-1];
 		this.price = 2.90;
+		this.draaiLimiet = 10;
 	}
 }
 
-class Ladderklimmen extends Attractie {
+class Ladderklimmen extends Attractie implements GokAttractie {
 	
 	Ladderklimmen() {
 		this.ID = 6;
 		this.name = Attractie.attractieNames[ID-1];
 		this.price = 5.00;
+	}
+	
+	public double kansSpelBelastingBetalen() {
+		double taxPayment = this.turnover * 0.3;
+		this.turnover -= taxPayment;
+		return taxPayment;
 	}
 }
