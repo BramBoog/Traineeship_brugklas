@@ -31,6 +31,9 @@ Changing branch name:
 Telling git to ignore a file/directory:
 	$ echo <file/dir name> >> .gitignore
 
+Showing the remote repository info:
+	$ git remote show origin
+
 Resetting a pull:
 	$ git reset --hard ORIG_HEAD
 
